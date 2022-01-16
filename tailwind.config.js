@@ -8,6 +8,9 @@ module.exports = {
             backgroundImage: {
                 'header-logo': "url('./img/Header.png')"
 
+            },
+            padding: {
+                '24px': '24px'
             }
         },
 
@@ -18,7 +21,7 @@ module.exports = {
                 'yellow': '#FFCE33',
                 'red': '#FF5C5C',
                 'gray': '#F2F2F2',
-                'text-gray': '#999999'
+                'gray-light': '#999999'
             }
 
         }

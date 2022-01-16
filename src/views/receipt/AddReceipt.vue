@@ -1,12 +1,5 @@
 <template>
-  <h1>I'm AddReceipt Page</h1>
   <div class="add-receipt flex flex-col px-6">
-    <!-- <div class="form-control">
-      <label class="label">
-        <span class="label-text">Username</span>
-      </label>
-      <input type="text" placeholder="username" class="input" />
-    </div> -->
     <div class="form-control receipt flex flex-col py-3">
       <label class="label">
         <div class="title">發票號碼</div>
@@ -16,6 +9,7 @@
           type="text"
           class="receipt-eng input-ghost input-lg"
           placeholder="大寫英文"
+          v-model="receipt.eng"
         />
         <input
           type="text"
@@ -26,6 +20,7 @@
             border-1 border-gray-600
           "
           placeholder="8碼發票號碼"
+          v-model="receipt.num"
         />
       </div>
     </div>
@@ -39,16 +34,19 @@
           type="text"
           class="receipt-eng input-ghost input-lg"
           placeholder="西元年"
+          v-model="date.year"
         />
         <input
           type="text"
           class="receipt-eng input-ghost input-lg"
           placeholder="月份"
+          v-model="date.month"
         />
         <input
           type="text"
           class="receipt-eng input-ghost input-lg"
           placeholder="日期"
+          v-model="date.day"
         />
       </div>
     </div>
@@ -62,6 +60,7 @@
         self-center
         mt-12
       "
+      @click="doAddReceipt()"
     >
       提交
     </button>
@@ -69,14 +68,49 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, reactive, ref } from "vue";
+import { addReceipt } from "@/utils/api";
+import { IReceiptInfo, IReceipt } from "@/utils/type";
 
 // import { useRouter } from "vue-router";
 export default defineComponent({
   setup() {
-    // const router = useRouter();
-    const text = ref("text");
-    return { text };
+    const receipt = reactive({
+      eng: "",
+      num: "",
+    });
+    const date = reactive({
+      year: "",
+      month: "",
+      day: "",
+    });
+    const time = computed((): string => {
+      return date.year + "-" + date.month + "-" + date.day + " 00:00:00";
+    });
+    const invNum = computed((): string => {
+      return receipt.eng + "-" + receipt.num;
+    });
+
+    const doAddReceipt = async () => {
+      let receipt = {
+        id: 0,
+        invNum: invNum.value,
+        status: "驗證中",
+        type: 1,
+        time: time.value,
+      };
+      await addReceipt(receipt);
+      cleanInput();
+    };
+
+    const cleanInput = () => {
+      receipt.eng = "";
+      receipt.num = "";
+      date.year = "";
+      date.month = "";
+      date.day = "";
+    };
+    return { doAddReceipt, receipt, date };
   },
 });
 </script>

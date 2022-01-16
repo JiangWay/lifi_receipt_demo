@@ -4,15 +4,18 @@ export interface IReceiptInfo{
     amount: number|string
 }
 
+export interface IReceiptResp{
+    invoices:IReceipt[]
+}
 export interface IReceipt{
     id:number
     invNum: string
     status: string
     type: number
     time: string
-    amount: number
-    sellerName: string
-    details: IReceiptDetails[]
+    amount?: number
+    sellerName?: string
+    details?: IReceiptDetails[]
 }
 
 export interface IReceiptDetails{
