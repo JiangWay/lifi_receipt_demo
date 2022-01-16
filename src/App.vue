@@ -1,10 +1,32 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  <!-- 首頁Header -->
+  <HomeHeader v-show="pageName === 'ReceiptList'" />
+  <!-- 內頁Header -->
+  <PageHeader v-show="pageName !== 'ReceiptList'" />
+  <body>
+    <router-view />
+  </body>
 </template>
+
+<script lang="ts">
+import { defineComponent, ref, watch } from "vue";
+import HomeHeader from "@/components/HomeHeader.vue";
+import PageHeader from "@/components/PageHeader.vue";
+import { useRoute } from "vue-router";
+
+export default defineComponent({
+  components: { HomeHeader, PageHeader },
+  setup() {
+    const route = useRoute();
+
+    const pageName = ref("home");
+    watch(route, (newValue) => {
+      pageName.value = JSON.parse(JSON.stringify(newValue.name));
+    });
+    return { pageName };
+  },
+});
+</script>
 
 <style lang="scss">
 #app {
